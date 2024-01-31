@@ -27,12 +27,14 @@ public class Array<E> {
     }
 
     public void add(int index,E e) {
-        if (size == data.length) {
-            throw new IllegalArgumentException("fail");
-        }
+
 
         if (index < 0 || index > size) {
             throw new IllegalArgumentException("fail");
+        }
+
+        if (size == data.length) {
+            resize(2*data.length);
         }
 
         for (int i = size - 1; i >= index; i--) {
@@ -85,6 +87,11 @@ public class Array<E> {
             data[i-1] = data[i];
         }
         size--;
+        data[size] = null;
+
+        if(size == data.length/2){
+            resize(data.length/2);
+        }
         return ret;
     }
 
@@ -96,6 +103,13 @@ public class Array<E> {
         return remove(size-1);
     }
 
+    private void resize(int newCapacity){
+        E[] newData = (E[])new Object[newCapacity];
+        for(int i=0; i<size; i++){
+            newData[i] = data[i];
+        }
+        data = newData;
+    }
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
