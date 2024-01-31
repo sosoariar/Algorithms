@@ -67,6 +67,26 @@ public class Array {
         return -1;
     }
 
+    public int remove(int index){
+        if(index<0||index>=size){
+            throw new IllegalArgumentException("fail");
+        }
+        int ret = data[index];
+        for(int i=index+1;i<size;i++){
+            data[i-1] = data[i];
+        }
+        size--;
+        return ret;
+    }
+
+    public int removeFirst(){
+        return remove(0);
+    }
+
+    public int removeLast(){
+        return remove(size-1);
+    }
+
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
