@@ -49,6 +49,24 @@ public class Array {
         add(size,0);
     }
 
+    public boolean contains(int e){
+        for(int i=0;i<size;i++){
+            if(data[i] == e){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int find(int e){
+        for(int i=0; i<size; i++){
+            if(data[i] == e){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     @Override
     public String toString() {
         StringBuilder res = new StringBuilder();
