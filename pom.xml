@@ -11,6 +11,7 @@
     <modules>
         <module>Algorithms_by_Robert _edgewick</module>
         <module>common_tools</module>
+        <module>datastruct</module>
     </modules>
 
     <properties>

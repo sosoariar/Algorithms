@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="common_tools" />
         <module name="Algorithms_by_Robert _edgewick" />
+        <module name="datastruct" />
       </profile>
     </annotationProcessing>
   </component>
