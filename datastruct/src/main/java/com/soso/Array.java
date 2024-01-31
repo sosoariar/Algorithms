@@ -28,13 +28,28 @@ public class Array {
 
     public void addLast(int e){
         if(size == data.length){
-            throw new IllegalArgumentException("AddLast failed Array is full");
+            throw new IllegalArgumentException("fail");
         }
         data[size]=e;
         size++;
     }
 
+    public void add(int index,int e){
+        if(size == data.length){
+            throw new IllegalArgumentException("fail");
+        }
 
+        if(index<0||index>size){
+            throw new IllegalArgumentException("fail");
+        }
+
+        for(int i=size-1; i>=index; i--){
+            data[i+1]=data[i];
+        }
+
+
+
+    }
 
 
 }
