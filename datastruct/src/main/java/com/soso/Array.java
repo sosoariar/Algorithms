@@ -1,12 +1,12 @@
 package com.soso;
 
-public class Array {
+public class Array<E> {
 
-    private int[] data;
+    private E[] data;
     private int size;
 
     public Array(int capacity){
-        data = new int[capacity];
+        data = (E[])new Object[capacity];
         size = 0;
     }
 
@@ -26,7 +26,7 @@ public class Array {
         return size == 0;
     }
 
-    public void add(int index,int e) {
+    public void add(int index,E e) {
         if (size == data.length) {
             throw new IllegalArgumentException("fail");
         }
@@ -39,26 +39,35 @@ public class Array {
             data[i + 1] = data[i];
         }
 
+        data[index] = e;
+        size++;
     }
 
-    public void addFirst(int e){
+    public void addFirst(E e){
         add(0,e);
     }
 
-    public void addLast(int e){
-        add(size,0);
+    public void addLast(E e){
+        add(size,e);
     }
 
-    public boolean contains(int e){
+    public E get(int index){
+        if(index<0 || index>=size){
+            throw new IllegalArgumentException("fail");
+        }
+        return data[index];
+    }
+
+    public boolean contains(E e){
         for(int i=0;i<size;i++){
-            if(data[i] == e){
+            if(data[i].equals(e)){
                 return true;
             }
         }
         return false;
     }
 
-    public int find(int e){
+    public int find(E e){
         for(int i=0; i<size; i++){
             if(data[i] == e){
                 return i;
@@ -67,11 +76,11 @@ public class Array {
         return -1;
     }
 
-    public int remove(int index){
+    public E remove(int index){
         if(index<0||index>=size){
             throw new IllegalArgumentException("fail");
         }
-        int ret = data[index];
+        E ret = data[index];
         for(int i=index+1;i<size;i++){
             data[i-1] = data[i];
         }
@@ -79,11 +88,11 @@ public class Array {
         return ret;
     }
 
-    public int removeFirst(){
+    public E removeFirst(){
         return remove(0);
     }
 
-    public int removeLast(){
+    public E removeLast(){
         return remove(size-1);
     }
 
