@@ -52,15 +52,15 @@ public class LinkedList<E> {
             throw new IllegalArgumentException("fail");
         }
 
-        if(index == 0){
-            addFirst(e);
-        }else{
-            Node prev = head;
-            for(int i=0; i<index-1; i++){
-                prev = prev.next;
-            }
-            prev.next = new Node(e,prev.next);
-            size++;
+        Node prev = dummyHead;
+        for(int i=0; i<index;i++){
+            prev = prev.next;
         }
+        prev.next = new Node(e,prev);
+        size++;
+    }
+
+    public void addLast(E e){
+        add(size,e);
     }
 }
