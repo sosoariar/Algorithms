@@ -95,6 +95,14 @@ public class Array<E> {
         return ret;
     }
 
+    public E getLast(){
+        return get(size-1);
+    }
+
+    public E getFirst(){
+        return get(0);
+    }
+
     public E removeFirst(){
         return remove(0);
     }
