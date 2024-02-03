@@ -27,6 +27,7 @@ public class LinkedList<E> {
     }
 
     private Node head;
+    private Node dummyHead;
     int size;
 
     public LinkedList(){
