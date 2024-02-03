@@ -54,6 +54,25 @@ public class Solution {
 
             return node;
         }
+
+        // 看二分搜索树中是否包含元素e
+        public boolean contains(E e){
+            return contains(root, e);
+        }
+
+        // 看以node为根的二分搜索树中是否包含元素e, 递归算法
+        private boolean contains(Node node, E e){
+
+            if(node == null)
+                return false;
+
+            if(e.compareTo(node.e) == 0)
+                return true;
+            else if(e.compareTo(node.e) < 0)
+                return contains(node.left, e);
+            else // e.compareTo(node.e) > 0
+                return contains(node.right, e);
+        }
     }
 
     public int uniqueMorseRepresentations(String[] words) {
@@ -64,7 +83,9 @@ public class Solution {
             StringBuilder res = new StringBuilder();
             for(int i = 0 ; i < word.length() ; i ++)
                 res.append(codes[word.charAt(i) - 'a']);
-            bst.add(res.toString());
+
+            if(!bst.contains(res.toString()))
+                bst.add(res.toString());
         }
 
         return bst.size();
