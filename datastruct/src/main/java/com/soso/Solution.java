@@ -1,93 +1,42 @@
-/// Leetcode 804. Unique Morse Code Words
-/// https://leetcode.com/problems/unique-morse-code-words/description/
+/// Leetcode 144. Binary Tree Preorder Traversal
+/// https://leetcode.com/problems/binary-tree-preorder-traversal/description/
 ///
 /// 课程中在这里暂时没有介绍这个问题
 /// 该代码主要用于使用Leetcode上的问题测试我们的BST类
+/// 该测试主要测试前序遍历的非递归写法
+
+import java.util.List;
+import java.util.LinkedList;
+import java.util.Stack;
+
 public class Solution {
 
-    private class BST<E extends Comparable<E>> {
-
-        private class Node {
-            public E e;
-            public Node left, right;
-
-            public Node(E e) {
-                this.e = e;
-                left = null;
-                right = null;
-            }
-        }
-
-        private Node root;
-        private int size;
-
-        public BST(){
-            root = null;
-            size = 0;
-        }
-
-        public int size(){
-            return size;
-        }
-
-        public boolean isEmpty(){
-            return size == 0;
-        }
-
-        // 向二分搜索树中添加新的元素e
-        public void add(E e){
-            root = add(root, e);
-        }
-
-        // 向以node为根的二分搜索树中插入元素e，递归算法
-        // 返回插入新节点后二分搜索树的根
-        private Node add(Node node, E e){
-            if(node == null){
-                size ++;
-                return new Node(e);
-            }
-
-            if(e.compareTo(node.e) < 0)
-                node.left = add(node.left, e);
-            else if(e.compareTo(node.e) > 0)
-                node.right = add(node.right, e);
-
-            return node;
-        }
-
-        // 看二分搜索树中是否包含元素e
-        public boolean contains(E e){
-            return contains(root, e);
-        }
-
-        // 看以node为根的二分搜索树中是否包含元素e, 递归算法
-        private boolean contains(Node node, E e){
-
-            if(node == null)
-                return false;
-
-            if(e.compareTo(node.e) == 0)
-                return true;
-            else if(e.compareTo(node.e) < 0)
-                return contains(node.left, e);
-            else // e.compareTo(node.e) > 0
-                return contains(node.right, e);
-        }
+    // Definition for a binary tree node.
+    public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode(int x) { val = x; }
     }
 
-    public int uniqueMorseRepresentations(String[] words) {
+    public List<Integer> preorderTraversal(TreeNode root) {
 
-        String[] codes = {".-","-...","-.-.","-..",".","..-.","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.."};
-        BST<String> bst = new BST<>();
-        for(String word: words){
-            StringBuilder res = new StringBuilder();
-            for(int i = 0 ; i < word.length() ; i ++)
-                res.append(codes[word.charAt(i) - 'a']);
+        List<Integer> res = new LinkedList<>();
+        if(root == null)
+            return res;
 
-            if(!bst.contains(res.toString()))
-                bst.add(res.toString());
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while(!stack.isEmpty()){
+            TreeNode cur = stack.pop();
+            res.add(cur.val);
+
+            if(cur.right != null)
+                stack.push(cur.right);
+            if(cur.left != null)
+                stack.push(cur.left);
         }
 
-        return bst.size();
+        return res;
     }
 }

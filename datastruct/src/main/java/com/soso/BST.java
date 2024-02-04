@@ -84,34 +84,23 @@ public class BST<E extends Comparable<E>> {
         preOrder(node.right);
     }
 
-    // 二分搜索树的中序遍历
-    public void inOrder(){
-        inOrder(root);
-    }
+    // 二分搜索树的非递归前序遍历
+    public void preOrderNR(){
 
-    // 中序遍历以node为根的二分搜索树, 递归算法
-    private void inOrder(Node node){
-        if(node == null)
+        if(root == null)
             return;
 
-        inOrder(node.left);
-        System.out.println(node.e);
-        inOrder(node.right);
-    }
+        Stack<Node> stack = new Stack<>();
+        stack.push(root);
+        while(!stack.isEmpty()){
+            Node cur = stack.pop();
+            System.out.println(cur.e);
 
-    // 二分搜索树的后序遍历
-    public void postOrder(){
-        postOrder(root);
-    }
-
-    // 后序遍历以node为根的二分搜索树, 递归算法
-    private void postOrder(Node node){
-        if(node == null)
-            return;
-
-        postOrder(node.left);
-        postOrder(node.right);
-        System.out.println(node.e);
+            if(cur.right != null)
+                stack.push(cur.right);
+            if(cur.left != null)
+                stack.push(cur.left);
+        }
     }
 
     @Override
