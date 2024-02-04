@@ -1,12 +1,22 @@
-package com.soso;
-
 public class Main {
+
     public static void main(String[] args) {
 
-        Array arr = new Array(20);
-        for(int i=0;i<10;i++){
-            arr.addLast(i);
-        }
-        System.out.println(arr);
+        BST<Integer> bst = new BST<>();
+        int[] nums = {5, 3, 6, 8, 4, 2};
+        for(int num: nums)
+            bst.add(num);
+
+        /////////////////
+        //      5      //
+        //    /   \    //
+        //   3    6    //
+        //  / \    \   //
+        // 2  4     8  //
+        /////////////////
+        bst.preOrder();
+        System.out.println();
+
+        System.out.println(bst);
     }
 }
