@@ -1,4 +1,6 @@
 import java.util.Stack;
+import java.util.Queue;
+import java.util.LinkedList;
 
 public class BST<E extends Comparable<E>> {
 
@@ -87,9 +89,6 @@ public class BST<E extends Comparable<E>> {
     // 二分搜索树的非递归前序遍历
     public void preOrderNR(){
 
-        if(root == null)
-            return;
-
         Stack<Node> stack = new Stack<>();
         stack.push(root);
         while(!stack.isEmpty()){
@@ -100,6 +99,55 @@ public class BST<E extends Comparable<E>> {
                 stack.push(cur.right);
             if(cur.left != null)
                 stack.push(cur.left);
+        }
+    }
+
+    // 二分搜索树的中序遍历
+    public void inOrder(){
+        inOrder(root);
+    }
+
+    // 中序遍历以node为根的二分搜索树, 递归算法
+    private void inOrder(Node node){
+        if(node == null)
+            return;
+
+        inOrder(node.left);
+        System.out.println(node.e);
+        inOrder(node.right);
+    }
+
+    // 二分搜索树的后序遍历
+    public void postOrder(){
+        postOrder(root);
+    }
+
+    // 后序遍历以node为根的二分搜索树, 递归算法
+    private void postOrder(Node node){
+        if(node == null)
+            return;
+
+        postOrder(node.left);
+        postOrder(node.right);
+        System.out.println(node.e);
+    }
+
+    // 二分搜索树的层序遍历
+    public void levelOrder(){
+
+        if(root == null)
+            return;
+
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        while(!q.isEmpty()){
+            Node cur = q.remove();
+            System.out.println(cur.e);
+
+            if(cur.left != null)
+                q.add(cur.left);
+            if(cur.right != null)
+                q.add(cur.right);
         }
     }
 
