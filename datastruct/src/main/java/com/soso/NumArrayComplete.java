@@ -1,6 +1,3 @@
-/// 303. Range Sum Query - Immutable
-/// https://leetcode.com/problems/range-sum-query-immutable/description/
-
 class NumArrayComplete {
 
     private interface Merger<E> {
@@ -95,6 +92,37 @@ class NumArrayComplete {
             return merger.merge(leftResult, rightResult);
         }
 
+        // 将index位置的值，更新为e
+        public void set(int index, E e){
+
+            if(index < 0 || index >= data.length)
+                throw new IllegalArgumentException("Index is illegal");
+
+            data[index] = e;
+            set(0, 0, data.length - 1, index, e);
+        }
+
+        // 在以treeIndex为根的线段树中更新index的值为e
+        private void set(int treeIndex, int l, int r, int index, E e){
+
+            if(l == r){
+                tree[treeIndex] = e;
+                return;
+            }
+
+            int mid = l + (r - l) / 2;
+            // treeIndex的节点分为[l...mid]和[mid+1...r]两部分
+
+            int leftTreeIndex = leftChild(treeIndex);
+            int rightTreeIndex = rightChild(treeIndex);
+            if(index >= mid + 1)
+                set(rightTreeIndex, mid + 1, r, index, e);
+            else // index <= mid
+                set(leftTreeIndex, l, mid, index, e);
+
+            tree[treeIndex] = merger.merge(tree[leftTreeIndex], tree[rightTreeIndex]);
+        }
+
         @Override
         public String toString(){
             StringBuilder res = new StringBuilder();
@@ -113,24 +141,27 @@ class NumArrayComplete {
         }
     }
 
-    private SegmentTree<Integer> segmentTree;
+    private SegmentTree<Integer> segTree;
 
     public NumArrayComplete(int[] nums) {
 
-        if(nums.length > 0){
+        if(nums.length != 0){
             Integer[] data = new Integer[nums.length];
-            for (int i = 0; i < nums.length; i++)
+            for(int i = 0 ; i < nums.length ; i ++)
                 data[i] = nums[i];
-            segmentTree = new SegmentTree<>(data, (a, b) -> a + b);
+            segTree = new SegmentTree<>(data, (a, b) -> a + b);
         }
+    }
 
+    public void update(int i, int val) {
+        if(segTree == null)
+            throw new IllegalArgumentException("Error");
+        segTree.set(i, val);
     }
 
     public int sumRange(int i, int j) {
-
-        if(segmentTree == null)
-            throw new IllegalArgumentException("Segment Tree is null");
-
-        return segmentTree.query(i, j);
+        if(segTree == null)
+            throw new IllegalArgumentException("Error");
+        return segTree.query(i, j);
     }
 }
