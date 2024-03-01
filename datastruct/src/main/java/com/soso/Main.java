@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Main {
 
@@ -33,7 +32,7 @@ public class Main {
             System.out.println("BST: " + time + " s");
 
 
-            // Test AVL Tree
+            // Test AVL
             startTime = System.nanoTime();
 
             AVLTree<String, Integer> avl = new AVLTree<>();
