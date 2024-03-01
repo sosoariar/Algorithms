@@ -1,24 +1,29 @@
 import java.util.ArrayList;
 
-public class BST<K extends Comparable<K>, V> {
+public class RBTree<K extends Comparable<K>, V> {
+
+    private static final boolean RED = true;
+    private static final boolean BLACK = false;
 
     private class Node{
         public K key;
         public V value;
         public Node left, right;
+        public boolean color;
 
         public Node(K key, V value){
             this.key = key;
             this.value = value;
             left = null;
             right = null;
+            color = RED;
         }
     }
 
     private Node root;
     private int size;
 
-    public BST(){
+    public RBTree(){
         root = null;
         size = 0;
     }
@@ -29,6 +34,13 @@ public class BST<K extends Comparable<K>, V> {
 
     public boolean isEmpty(){
         return size == 0;
+    }
+
+    // 判断节点node的颜色
+    private boolean isRed(Node node){
+        if(node == null)
+            return BLACK;
+        return node.color;
     }
 
     // 向二分搜索树中添加新的元素(key, value)
@@ -173,7 +185,7 @@ public class BST<K extends Comparable<K>, V> {
         if(FileOperation.readFile("pride-and-prejudice.txt", words)) {
             System.out.println("Total words: " + words.size());
 
-            BST<String, Integer> map = new BST<>();
+            RBTree<String, Integer> map = new RBTree<>();
             for (String word : words) {
                 if (map.contains(word))
                     map.set(word, map.get(word) + 1);
