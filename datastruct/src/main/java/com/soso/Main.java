@@ -24,7 +24,8 @@ public class Main {
 
         long endTime = System.nanoTime();
 
-        return (endTime - startTime) / 1000000000.0;
+        double time = (endTime - startTime) / 1000000000.0;
+        return time;
     }
 
     public static void main(String[] args) {
@@ -43,5 +44,8 @@ public class Main {
 
         UnionFind4 uf4 = new UnionFind4(size);
         System.out.println("UnionFind4 : " + testUF(uf4, m) + " s");
+
+        UnionFind5 uf5 = new UnionFind5(size);
+        System.out.println("UnionFind5 : " + testUF(uf5, m) + " s");
     }
 }
