@@ -2,7 +2,7 @@
 /// https://leetcode.com/problems/intersection-of-two-arrays-ii/description/
 ///
 /// 课程中在这里暂时没有介绍这个问题
-/// 该代码主要用于使用Leetcode上的问题测试我们的HashTable类
+/// 该代码主要用于使用Leetcode上的问题测试我们的BSTMap类
 
 import java.util.TreeMap;
 import java.util.ArrayList;
@@ -10,6 +10,10 @@ import java.util.ArrayList;
 public class Solution {
 
     private class HashTable<K, V> {
+
+        private static final int upperTol = 10;
+        private static final int lowerTol = 2;
+        private static final int initCapacity = 7;
 
         private TreeMap<K, V>[] hashtable;
         private int size;
@@ -24,19 +28,27 @@ public class Solution {
         }
 
         public HashTable(){
-            this(97);
+            this(initCapacity);
         }
 
         private int hash(K key){
             return (key.hashCode() & 0x7fffffff) % M;
         }
 
+        public int getSize(){
+            return size;
+        }
+
         public void add(K key, V value){
             TreeMap<K, V> map = hashtable[hash(key)];
-            // if(!hashtable[hash(key)].containsKey(key)){
-            if(!map.containsKey(key)){
+            if(map.containsKey(key))
+                map.put(key, value);
+            else{
                 map.put(key, value);
                 size ++;
+
+                if(size >= upperTol * M)
+                    resize(2 * M);
             }
         }
 
@@ -46,6 +58,9 @@ public class Solution {
             if(map.containsKey(key)){
                 ret = map.remove(key);
                 size --;
+
+                if(size < lowerTol * M && M / 2 >= initCapacity)
+                    resize(M / 2);
             }
             return ret;
         }
@@ -64,6 +79,22 @@ public class Solution {
 
         public V get(K key){
             return hashtable[hash(key)].get(key);
+        }
+
+        private void resize(int newM){
+            TreeMap<K, V>[] newHashTable = new TreeMap[newM];
+            for(int i = 0 ; i < newM ; i ++)
+                newHashTable[i] = new TreeMap<>();
+
+            int oldM = M;
+            this.M = newM;
+            for(int i = 0 ; i < oldM ; i ++){
+                TreeMap<K, V> map = hashtable[i];
+                for(K key: map.keySet())
+                    newHashTable[hash(key)].put(key, map.get(key));
+            }
+
+            this.hashtable = newHashTable;
         }
     }
 
