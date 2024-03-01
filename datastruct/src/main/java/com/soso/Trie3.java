@@ -1,16 +1,13 @@
-import java.util.TreeMap;
-
-/// 使用TreeMap的Trie
-public class Trie {
+public class Trie3 {
 
     private class Node{
 
         public boolean isWord;
-        public TreeMap<Character, Node> next;
+        public Node[] next;
 
         public Node(boolean isWord){
             this.isWord = isWord;
-            next = new TreeMap<>();
+            next = new Node[26];
         }
 
         public Node(){
@@ -21,7 +18,7 @@ public class Trie {
     private Node root;
     private int size;
 
-    public Trie(){
+    public Trie3(){
         root = new Node();
         size = 0;
     }
@@ -37,9 +34,9 @@ public class Trie {
         Node cur = root;
         for(int i = 0 ; i < word.length() ; i ++){
             char c = word.charAt(i);
-            if(cur.next.get(c) == null)
-                cur.next.put(c, new Node());
-            cur = cur.next.get(c);
+            if(cur.next[c-'a'] == null)
+                cur.next[c-'a'] = new Node();
+            cur = cur.next[c-'a'];
         }
 
         if(!cur.isWord){
@@ -54,9 +51,9 @@ public class Trie {
         Node cur = root;
         for(int i = 0 ; i < word.length() ; i ++){
             char c = word.charAt(i);
-            if(cur.next.get(c) == null)
+            if(cur.next[c-'a'] == null)
                 return false;
-            cur = cur.next.get(c);
+            cur = cur.next[c-'a'];
         }
         return cur.isWord;
     }

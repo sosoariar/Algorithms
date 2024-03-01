@@ -1,16 +1,16 @@
-import java.util.TreeMap;
+import java.util.HashMap;
 
-/// 使用TreeMap的Trie
-public class Trie {
+// 使用HashMap的Trie
+public class Trie2 {
 
     private class Node{
 
         public boolean isWord;
-        public TreeMap<Character, Node> next;
+        public HashMap<Character, Node> next;
 
         public Node(boolean isWord){
             this.isWord = isWord;
-            next = new TreeMap<>();
+            next = new HashMap<>();
         }
 
         public Node(){
@@ -21,7 +21,7 @@ public class Trie {
     private Node root;
     private int size;
 
-    public Trie(){
+    public Trie2(){
         root = new Node();
         size = 0;
     }
