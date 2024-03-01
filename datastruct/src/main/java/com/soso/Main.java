@@ -1,77 +1,35 @@
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.HashMap;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("Pride and Prejudice");
+        int a = 42;
+        System.out.println(((Integer)a).hashCode());
 
-        ArrayList<String> words = new ArrayList<>();
-        if(FileOperation.readFile("pride-and-prejudice.txt", words)) {
-            System.out.println("Total words: " + words.size());
+        int b = -42;
+        System.out.println(((Integer)b).hashCode());
 
-            // Collections.sort(words);
+        double c = 3.1415926;
+        System.out.println(((Double)c).hashCode());
 
-            // Test BST
-            long startTime = System.nanoTime();
+        String d = "imooc";
+        System.out.println(d.hashCode());
 
-            BST<String, Integer> bst = new BST<>();
-            for (String word : words) {
-                if (bst.contains(word))
-                    bst.set(word, bst.get(word) + 1);
-                else
-                    bst.add(word, 1);
-            }
-
-            for(String word: words)
-                bst.contains(word);
-
-            long endTime = System.nanoTime();
-
-            double time = (endTime - startTime) / 1000000000.0;
-            System.out.println("BST: " + time + " s");
-
-
-            // Test AVL
-            startTime = System.nanoTime();
-
-            AVLTree<String, Integer> avl = new AVLTree<>();
-            for (String word : words) {
-                if (avl.contains(word))
-                    avl.set(word, avl.get(word) + 1);
-                else
-                    avl.add(word, 1);
-            }
-
-            for(String word: words)
-                avl.contains(word);
-
-            endTime = System.nanoTime();
-
-            time = (endTime - startTime) / 1000000000.0;
-            System.out.println("AVL: " + time + " s");
-
-
-            // Test RBTree
-            startTime = System.nanoTime();
-
-            RBTree<String, Integer> rbt = new RBTree<>();
-            for (String word : words) {
-                if (rbt.contains(word))
-                    rbt.set(word, rbt.get(word) + 1);
-                else
-                    rbt.add(word, 1);
-            }
-
-            for(String word: words)
-                rbt.contains(word);
-
-            endTime = System.nanoTime();
-
-            time = (endTime - startTime) / 1000000000.0;
-            System.out.println("RBTree: " + time + " s");
-        }
-
+        System.out.println(Integer.MAX_VALUE + 1);
         System.out.println();
+
+        Student student = new Student(3, 2, "Bobo", "Liu");
+        System.out.println(student.hashCode());
+
+        HashSet<Student> set = new HashSet<>();
+        set.add(student);
+
+        HashMap<Student, Integer> scores = new HashMap<>();
+        scores.put(student, 100);
+
+        Student student2 = new Student(3, 2, "Bobo", "Liu");
+        System.out.println(student2.hashCode());
     }
 }
