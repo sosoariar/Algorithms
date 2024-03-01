@@ -1,8 +1,5 @@
 /// 347. Top K Frequent Elements
 /// https://leetcode.com/problems/top-k-frequent-elements/description/
-///
-/// 课程中在这里暂时没有介绍这个问题
-/// 该代码主要用于使用Leetcode上的问题测试我们的Priority Queue类
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +7,7 @@ import java.util.TreeMap;
 
 class Solution {
 
-    public class Array<E> {
+    private class Array<E> {
 
         private E[] data;
         private int size;
@@ -175,7 +172,7 @@ class Solution {
         }
     }
 
-    public class MaxHeap<E extends Comparable<E>> {
+    private class MaxHeap<E extends Comparable<E>> {
 
         private Array<E> data;
 
@@ -280,7 +277,7 @@ class Solution {
         }
     }
 
-    public interface Queue<E> {
+    private interface Queue<E> {
 
         int getSize();
         boolean isEmpty();
@@ -289,7 +286,7 @@ class Solution {
         E getFront();
     }
 
-    public class PriorityQueue<E extends Comparable<E>> implements Queue<E> {
+    private class PriorityQueue<E extends Comparable<E>> implements Queue<E> {
 
         private MaxHeap<E> maxHeap;
 
