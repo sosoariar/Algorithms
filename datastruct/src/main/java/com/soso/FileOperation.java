@@ -40,11 +40,11 @@ public class FileOperation {
         // 在这里只做demo展示用
         if (scanner.hasNextLine()) {
 
-            String contents = scanner.useDelimiter("\\A").next().toLowerCase();
+            String contents = scanner.useDelimiter("\\A").next();
 
             int start = firstCharacterIndex(contents, 0);
             for (int i = start + 1; i <= contents.length(); )
-                if (i == contents.length() || !isEnglishLetter(contents.charAt(i))) {
+                if (i == contents.length() || !Character.isLetter(contents.charAt(i))) {
                     String word = contents.substring(start, i).toLowerCase();
                     words.add(word);
                     start = firstCharacterIndex(contents, i);
@@ -56,15 +56,11 @@ public class FileOperation {
         return true;
     }
 
-    private static boolean isEnglishLetter(char ch){
-        return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
-    }
-
     // 寻找字符串s中，从start的位置开始的第一个字母字符的位置
     private static int firstCharacterIndex(String s, int start){
 
         for( int i = start ; i < s.length() ; i ++ )
-            if(isEnglishLetter(s.charAt(i)))
+            if( Character.isLetter(s.charAt(i)) )
                 return i;
         return s.length();
     }

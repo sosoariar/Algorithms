@@ -1,24 +1,26 @@
 import java.util.ArrayList;
 
-public class BST<K extends Comparable<K>, V> {
+public class AVLTree<K extends Comparable<K>, V> {
 
     private class Node{
         public K key;
         public V value;
         public Node left, right;
+        public int height;
 
         public Node(K key, V value){
             this.key = key;
             this.value = value;
             left = null;
             right = null;
+            height = 1;
         }
     }
 
     private Node root;
     private int size;
 
-    public BST(){
+    public AVLTree(){
         root = null;
         size = 0;
     }
@@ -29,6 +31,20 @@ public class BST<K extends Comparable<K>, V> {
 
     public boolean isEmpty(){
         return size == 0;
+    }
+
+    // 获得节点node的高度
+    private int getHeight(Node node){
+        if(node == null)
+            return 0;
+        return node.height;
+    }
+
+    // 获得节点node的平衡因子
+    private int getBalanceFactor(Node node){
+        if(node == null)
+            return 0;
+        return getHeight(node.left) - getHeight(node.right);
     }
 
     // 向二分搜索树中添加新的元素(key, value)
@@ -51,6 +67,14 @@ public class BST<K extends Comparable<K>, V> {
             node.right = add(node.right, key, value);
         else // key.compareTo(node.key) == 0
             node.value = value;
+
+        // 更新height
+        node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
+
+        // 计算平衡因子
+        int balanceFactor = getBalanceFactor(node);
+        if(Math.abs(balanceFactor) > 1)
+            System.out.println("unbalanced : " + balanceFactor);
 
         return node;
     }
@@ -173,7 +197,7 @@ public class BST<K extends Comparable<K>, V> {
         if(FileOperation.readFile("pride-and-prejudice.txt", words)) {
             System.out.println("Total words: " + words.size());
 
-            BST<String, Integer> map = new BST<>();
+            AVLTree<String, Integer> map = new AVLTree<>();
             for (String word : words) {
                 if (map.contains(word))
                     map.set(word, map.get(word) + 1);
