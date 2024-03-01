@@ -13,8 +13,8 @@ class Solution {
         void unionElements(int p, int q);
     }
 
-    // 我们的第五版Union-Find
-    private class UnionFind5 implements UF {
+    // 我们的第六版Union-Find
+    private class UnionFind6 implements UF {
 
         // rank[i]表示以i为根的集合所表示的树的层数
         // 在后续的代码中, 我们并不会维护rank的语意, 也就是rank的值在路径压缩的过程中, 有可能不在是树的层数值
@@ -23,7 +23,7 @@ class Solution {
         private int[] parent; // parent[i]表示第i个元素所指向的父节点
 
         // 构造函数
-        public UnionFind5(int size){
+        public UnionFind6(int size){
 
             rank = new int[size];
             parent = new int[size];
@@ -46,11 +46,10 @@ class Solution {
             if(p < 0 || p >= parent.length)
                 throw new IllegalArgumentException("p is out of bound.");
 
-            while( p != parent[p] ){
-                parent[p] = parent[parent[p]];
-                p = parent[p];
-            }
-            return p;
+            // path compression 2, 递归算法
+            if(p != parent[p])
+                parent[p] = find(parent[p]);
+            return parent[p];
         }
 
         // 查看元素p和元素q是否所属一个集合
@@ -87,7 +86,7 @@ class Solution {
     public int findCircleNum(int[][] M) {
 
         int n = M.length;
-        UnionFind5 uf = new UnionFind5(n);
+        UnionFind6 uf = new UnionFind6(n);
         for(int i = 0 ; i < n ; i ++)
             for(int j = 0 ; j < i ; j ++)
                 if(M[i][j] == 1)

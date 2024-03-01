@@ -47,5 +47,8 @@ public class Main {
 
         UnionFind5 uf5 = new UnionFind5(size);
         System.out.println("UnionFind5 : " + testUF(uf5, m) + " s");
+
+        UnionFind6 uf6 = new UnionFind6(size);
+        System.out.println("UnionFind6 : " + testUF(uf6, m) + " s");
     }
 }
