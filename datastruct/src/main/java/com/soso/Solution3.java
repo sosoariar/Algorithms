@@ -1,29 +1,17 @@
 /// 347. Top K Frequent Elements
 /// https://leetcode.com/problems/top-k-frequent-elements/description/
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
-import java.util.TreeMap;
+import java.util.*;
 
-public class Solution {
+public class Solution3 {
 
-    private class Freq implements Comparable<Freq>{
+    private class Freq{
 
         public int e, freq;
 
         public Freq(int e, int freq){
             this.e = e;
             this.freq = freq;
-        }
-
-        public int compareTo(Freq another){
-            if(this.freq < another.freq)
-                return -1;
-            else if(this.freq > another.freq)
-                return 1;
-            else
-                return 0;
         }
     }
 
@@ -37,7 +25,12 @@ public class Solution {
                 map.put(num, 1);
         }
 
-        PriorityQueue<Freq> pq = new PriorityQueue<>();
+        PriorityQueue<Freq> pq = new PriorityQueue<>(new Comparator<Freq>() {
+            @Override
+            public int compare(Freq a, Freq b) {
+                return a.freq - b.freq;
+            }
+        });
         for(int key: map.keySet()){
             if(pq.size() < k)
                 pq.add(new Freq(key, map.get(key)));
