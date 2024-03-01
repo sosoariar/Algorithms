@@ -85,6 +85,52 @@ public class AVLTree<K extends Comparable<K>, V> {
         return getHeight(node.left) - getHeight(node.right);
     }
 
+    // 对节点y进行向右旋转操作，返回旋转后新的根节点x
+    //        y                              x
+    //       / \                           /   \
+    //      x   T4     向右旋转 (y)        z     y
+    //     / \       - - - - - - - ->    / \   / \
+    //    z   T3                       T1  T2 T3 T4
+    //   / \
+    // T1   T2
+    private Node rightRotate(Node y) {
+        Node x = y.left;
+        Node T3 = x.right;
+
+        // 向右旋转过程
+        x.right = y;
+        y.left = T3;
+
+        // 更新height
+        y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
+        x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
+
+        return x;
+    }
+
+    // 对节点y进行向左旋转操作，返回旋转后新的根节点x
+    //    y                             x
+    //  /  \                          /   \
+    // T1   x      向左旋转 (y)       y     z
+    //     / \   - - - - - - - ->   / \   / \
+    //   T2  z                     T1 T2 T3 T4
+    //      / \
+    //     T3 T4
+    private Node leftRotate(Node y) {
+        Node x = y.right;
+        Node T2 = x.left;
+
+        // 向左旋转过程
+        x.left = y;
+        y.right = T2;
+
+        // 更新height
+        y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
+        x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
+
+        return x;
+    }
+
     // 向二分搜索树中添加新的元素(key, value)
     public void add(K key, V value){
         root = add(root, key, value);
@@ -116,7 +162,10 @@ public class AVLTree<K extends Comparable<K>, V> {
 
         // 平衡维护
         if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0)
-            ; // 实现平衡维护，下一小节进行具体实现：）
+            return rightRotate(node);
+
+        if (balanceFactor < -1 && getBalanceFactor(node.right) <= 0)
+            return leftRotate(node);
 
         return node;
     }
