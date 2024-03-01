@@ -27,15 +27,10 @@ public class HashTable<K, V> {
         return (key.hashCode() & 0x7fffffff) % M;
     }
 
-    public int getSize(){
-        return size;
-    }
-
     public void add(K key, V value){
         TreeMap<K, V> map = hashtable[hash(key)];
-        if(map.containsKey(key))
-            map.put(key, value);
-        else{
+        // if(!hashtable[hash(key)].containsKey(key)){
+        if(!map.containsKey(key)){
             map.put(key, value);
             size ++;
 
@@ -51,7 +46,7 @@ public class HashTable<K, V> {
             ret = map.remove(key);
             size --;
 
-            if(size < lowerTol * M && M / 2 >= initCapacity)
+            if(size <= lowerTol * M && M > initCapacity)
                 resize(M / 2);
         }
         return ret;
@@ -78,14 +73,11 @@ public class HashTable<K, V> {
         for(int i = 0 ; i < newM ; i ++)
             newHashTable[i] = new TreeMap<>();
 
-        int oldM = M;
-        this.M = newM;
-        for(int i = 0 ; i < oldM ; i ++){
-            TreeMap<K, V> map = hashtable[i];
-            for(K key: map.keySet())
-                newHashTable[hash(key)].put(key, map.get(key));
-        }
+        for(int i = 0 ; i < M ; i ++)
+            for(K key: hashtable[i].keySet())
+                newHashTable[hash(key)].put(key, hashtable[i].get(key));
 
+        this.M = newM;
         this.hashtable = newHashTable;
     }
 }
