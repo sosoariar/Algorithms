@@ -29,21 +29,19 @@ public class Main {
 
     public static void main(String[] args) {
 
-        // UnionFind1 慢于 UnionFind2
-//        int size = 100000;
-//        int m = 10000;
+        int size = 10000000;
+        int m = 10000000;
 
-        // UnionFind2 慢于 UnionFind1, 但UnionFind3最快
-        int size = 100000;
-        int m = 100000;
-
-        UnionFind1 uf1 = new UnionFind1(size);
-        System.out.println("UnionFind1 : " + testUF(uf1, m) + " s");
-
-        UnionFind2 uf2 = new UnionFind2(size);
-        System.out.println("UnionFind2 : " + testUF(uf2, m) + " s");
+//        UnionFind1 uf1 = new UnionFind1(size);
+//        System.out.println("UnionFind1 : " + testUF(uf1, m) + " s");
+//
+//        UnionFind2 uf2 = new UnionFind2(size);
+//        System.out.println("UnionFind2 : " + testUF(uf2, m) + " s");
 
         UnionFind3 uf3 = new UnionFind3(size);
         System.out.println("UnionFind3 : " + testUF(uf3, m) + " s");
+
+        UnionFind4 uf4 = new UnionFind4(size);
+        System.out.println("UnionFind4 : " + testUF(uf4, m) + " s");
     }
 }
