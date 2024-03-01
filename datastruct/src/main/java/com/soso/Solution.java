@@ -1,221 +1,319 @@
-/// Leetcode 350. Intersection of Two Arrays II
-/// https://leetcode.com/problems/intersection-of-two-arrays-ii/description/
+/// 347. Top K Frequent Elements
+/// https://leetcode.com/problems/top-k-frequent-elements/description/
 ///
 /// 课程中在这里暂时没有介绍这个问题
-/// 该代码主要用于使用Leetcode上的问题测试我们的BSTMap类
+/// 该代码主要用于使用Leetcode上的问题测试我们的MaxHeap类
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeMap;
 
-public class Solution {
+class Solution {
 
-    private interface Map<K, V> {
+    public class Array<E> {
 
-        void add(K key, V value);
-        boolean contains(K key);
-        V get(K key);
-        void set(K key, V newValue);
-        V remove(K key);
-        int getSize();
-        boolean isEmpty();
-    }
-
-    private class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
-
-        private class Node{
-            public K key;
-            public V value;
-            public Node left, right;
-
-            public Node(K key, V value){
-                this.key = key;
-                this.value = value;
-                left = null;
-                right = null;
-            }
-        }
-
-        private Node root;
+        private E[] data;
         private int size;
 
-        public BSTMap(){
-            root = null;
+        // 构造函数，传入数组的容量capacity构造Array
+        public Array(int capacity){
+            data = (E[])new Object[capacity];
             size = 0;
         }
 
-        @Override
+        // 无参数的构造函数，默认数组的容量capacity=10
+        public Array(){
+            this(10);
+        }
+
+        // 获取数组的容量
+        public int getCapacity(){
+            return data.length;
+        }
+
+        // 获取数组中的元素个数
         public int getSize(){
             return size;
         }
 
-        @Override
+        // 返回数组是否为空
         public boolean isEmpty(){
             return size == 0;
         }
 
-        // 向二分搜索树中添加新的元素(key, value)
-        @Override
-        public void add(K key, V value){
-            root = add(root, key, value);
+        // 在index索引的位置插入一个新元素e
+        public void add(int index, E e){
+
+            if(index < 0 || index > size)
+                throw new IllegalArgumentException("Add failed. Require index >= 0 and index <= size.");
+
+            if(size == data.length)
+                resize(2 * data.length);
+
+            for(int i = size - 1; i >= index ; i --)
+                data[i + 1] = data[i];
+
+            data[index] = e;
+
+            size ++;
         }
 
-        // 向以node为根的二分搜索树中插入元素(key, value)，递归算法
-        // 返回插入新节点后二分搜索树的根
-        private Node add(Node node, K key, V value){
+        // 向所有元素后添加一个新元素
+        public void addLast(E e){
+            add(size, e);
+        }
 
-            if(node == null){
-                size ++;
-                return new Node(key, value);
+        // 在所有元素前添加一个新元素
+        public void addFirst(E e){
+            add(0, e);
+        }
+
+        // 获取index索引位置的元素
+        public E get(int index){
+            if(index < 0 || index >= size)
+                throw new IllegalArgumentException("Get failed. Index is illegal.");
+            return data[index];
+        }
+
+        // 修改index索引位置的元素为e
+        public void set(int index, E e){
+            if(index < 0 || index >= size)
+                throw new IllegalArgumentException("Set failed. Index is illegal.");
+            data[index] = e;
+        }
+
+        // 查找数组中是否有元素e
+        public boolean contains(E e){
+            for(int i = 0 ; i < size ; i ++){
+                if(data[i].equals(e))
+                    return true;
             }
-
-            if(key.compareTo(node.key) < 0)
-                node.left = add(node.left, key, value);
-            else if(key.compareTo(node.key) > 0)
-                node.right = add(node.right, key, value);
-            else // key.compareTo(node.key) == 0
-                node.value = value;
-
-            return node;
+            return false;
         }
 
-        // 返回以node为根节点的二分搜索树中，key所在的节点
-        private Node getNode(Node node, K key){
+        // 查找数组中元素e所在的索引，如果不存在元素e，则返回-1
+        public int find(E e){
+            for(int i = 0 ; i < size ; i ++){
+                if(data[i].equals(e))
+                    return i;
+            }
+            return -1;
+        }
 
-            if(node == null)
-                return null;
+        // 从数组中删除index位置的元素, 返回删除的元素
+        public E remove(int index){
+            if(index < 0 || index >= size)
+                throw new IllegalArgumentException("Remove failed. Index is illegal.");
 
-            if(key.equals(node.key))
-                return node;
-            else if(key.compareTo(node.key) < 0)
-                return getNode(node.left, key);
-            else // if(key.compareTo(node.key) > 0)
-                return getNode(node.right, key);
+            E ret = data[index];
+            for(int i = index + 1 ; i < size ; i ++)
+                data[i - 1] = data[i];
+            size --;
+            data[size] = null; // loitering objects != memory leak
+
+            if(size == data.length / 4 && data.length / 2 != 0)
+                resize(data.length / 2);
+            return ret;
+        }
+
+        // 从数组中删除第一个元素, 返回删除的元素
+        public E removeFirst(){
+            return remove(0);
+        }
+
+        // 从数组中删除最后一个元素, 返回删除的元素
+        public E removeLast(){
+            return remove(size - 1);
+        }
+
+        // 从数组中删除元素e
+        public void removeElement(E e){
+            int index = find(e);
+            if(index != -1)
+                remove(index);
+        }
+
+        public void swap(int i, int j){
+
+            if(i < 0 || i >= size || j < 0 || j >= size)
+                throw new IllegalArgumentException("Index is illegal.");
+
+            E t = data[i];
+            data[i] = data[j];
+            data[j] = t;
         }
 
         @Override
-        public boolean contains(K key){
-            return getNode(root, key) != null;
-        }
+        public String toString(){
 
-        @Override
-        public V get(K key){
-
-            Node node = getNode(root, key);
-            return node == null ? null : node.value;
-        }
-
-        @Override
-        public void set(K key, V newValue){
-            Node node = getNode(root, key);
-            if(node == null)
-                throw new IllegalArgumentException(key + " doesn't exist!");
-
-            node.value = newValue;
-        }
-
-        // 返回以node为根的二分搜索树的最小值所在的节点
-        private Node minimum(Node node){
-            if(node.left == null)
-                return node;
-            return minimum(node.left);
-        }
-
-        // 删除掉以node为根的二分搜索树中的最小节点
-        // 返回删除节点后新的二分搜索树的根
-        private Node removeMin(Node node){
-
-            if(node.left == null){
-                Node rightNode = node.right;
-                node.right = null;
-                size --;
-                return rightNode;
+            StringBuilder res = new StringBuilder();
+            res.append(String.format("Array: size = %d , capacity = %d\n", size, data.length));
+            res.append('[');
+            for(int i = 0 ; i < size ; i ++){
+                res.append(data[i]);
+                if(i != size - 1)
+                    res.append(", ");
             }
-
-            node.left = removeMin(node.left);
-            return node;
+            res.append(']');
+            return res.toString();
         }
 
-        // 从二分搜索树中删除键为key的节点
-        @Override
-        public V remove(K key){
+        // 将数组空间的容量变成newCapacity大小
+        private void resize(int newCapacity){
 
-            Node node = getNode(root, key);
-            if(node != null){
-                root = remove(root, key);
-                return node.value;
-            }
-            return null;
+            E[] newData = (E[])new Object[newCapacity];
+            for(int i = 0 ; i < size ; i ++)
+                newData[i] = data[i];
+            data = newData;
+        }
+    }
+
+    public class MaxHeap<E extends Comparable<E>> {
+
+        private Array<E> data;
+
+        public MaxHeap(int capacity){
+            data = new Array<>(capacity);
         }
 
-        private Node remove(Node node, K key){
+        public MaxHeap(){
+            data = new Array<>();
+        }
 
-            if( node == null )
-                return null;
+        // 返回堆中的元素个数
+        public int size(){
+            return data.getSize();
+        }
 
-            if( key.compareTo(node.key) < 0 ){
-                node.left = remove(node.left , key);
-                return node;
+        // 返回一个布尔值, 表示堆中是否为空
+        public boolean isEmpty(){
+            return data.isEmpty();
+        }
+
+        // 返回完全二叉树的数组表示中，一个索引所表示的元素的父亲节点的索引
+        private int parent(int index){
+            if(index == 0)
+                throw new IllegalArgumentException("index-0 doesn't have parent.");
+            return (index - 1) / 2;
+        }
+
+        // 返回完全二叉树的数组表示中，一个索引所表示的元素的左孩子节点的索引
+        private int leftChild(int index){
+            return index * 2 + 1;
+        }
+
+        // 返回完全二叉树的数组表示中，一个索引所表示的元素的右孩子节点的索引
+        private int rightChild(int index){
+            return index * 2 + 2;
+        }
+
+        // 向堆中添加元素
+        public void add(E e){
+            data.addLast(e);
+            siftUp(data.getSize() - 1);
+        }
+
+        private void siftUp(int k){
+
+            while(k > 0 && data.get(parent(k)).compareTo(data.get(k)) < 0 ){
+                data.swap(k, parent(k));
+                k = parent(k);
             }
-            else if(key.compareTo(node.key) > 0 ){
-                node.right = remove(node.right, key);
-                return node;
-            }
-            else{   // key.compareTo(node.key) == 0
+        }
 
-                // 待删除节点左子树为空的情况
-                if(node.left == null){
-                    Node rightNode = node.right;
-                    node.right = null;
-                    size --;
-                    return rightNode;
-                }
+        // 看堆中的最大元素
+        public E findMax(){
+            if(data.getSize() == 0)
+                throw new IllegalArgumentException("Can not findMax when heap is empty.");
+            return data.get(0);
+        }
 
-                // 待删除节点右子树为空的情况
-                if(node.right == null){
-                    Node leftNode = node.left;
-                    node.left = null;
-                    size --;
-                    return leftNode;
-                }
+        // 取出堆中最大元素
+        public E extractMax(){
 
-                // 待删除节点左右子树均不为空的情况
+            E ret = findMax();
 
-                // 找到比待删除节点大的最小节点, 即待删除节点右子树的最小节点
-                // 用这个节点顶替待删除节点的位置
-                Node successor = minimum(node.right);
-                successor.right = removeMin(node.right);
-                successor.left = node.left;
+            data.swap(0, data.getSize() - 1);
+            data.removeLast();
+            siftDown(0);
 
-                node.left = node.right = null;
+            return ret;
+        }
 
-                return successor;
+        private void siftDown(int k){
+
+            while(leftChild(k) < data.getSize()){
+                int j = leftChild(k); // 在此轮循环中,data[k]和data[j]交换位置
+                if( j + 1 < data.getSize() &&
+                        data.get(j + 1).compareTo(data.get(j)) > 0 )
+                    j ++;
+                // data[j] 是 leftChild 和 rightChild 中的最大值
+
+                if(data.get(k).compareTo(data.get(j)) >= 0 )
+                    break;
+
+                data.swap(k, j);
+                k = j;
             }
         }
     }
 
-    public int[] intersect(int[] nums1, int[] nums2) {
+    private class Freq implements Comparable<Freq>{
 
-        BSTMap<Integer, Integer> map = new BSTMap<>();
-        for(int num: nums1){
-            if(!map.contains(num))
-                map.add(num, 1);
-            else
-                map.set(num, map.get(num) + 1);
+        public int e, freq;
+
+        public Freq(int e, int freq){
+            this.e = e;
+            this.freq = freq;
         }
 
-        ArrayList<Integer> res = new ArrayList<>();
-        for(int num: nums2){
-            if(map.contains(num)){
-                res.add(num);
-                map.set(num, map.get(num) - 1);
-                if(map.get(num) == 0)
-                    map.remove(num);
+        @Override
+        public int compareTo(Freq another){
+            if(this.freq < another.freq)
+                return 1;
+            else if(this.freq > another.freq)
+                return -1;
+            else
+                return 0;
+        }
+    }
+
+    public List<Integer> topKFrequent(int[] nums, int k) {
+
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        for(int num: nums){
+            if(map.containsKey(num))
+                map.put(num, map.get(num) + 1);
+            else
+                map.put(num, 1);
+        }
+
+        MaxHeap<Freq> maxHeap = new MaxHeap<>();
+        for(int key: map.keySet()){
+            if(maxHeap.size() < k)
+                maxHeap.add(new Freq(key, map.get(key)));
+            else if(map.get(key) > maxHeap.findMax().freq){
+                maxHeap.extractMax();
+                maxHeap.add(new Freq(key, map.get(key)));
             }
         }
 
-        int[] ret = new int[res.size()];
-        for(int i = 0 ; i < res.size() ; i ++)
-            ret[i] = res.get(i);
+        LinkedList<Integer> res = new LinkedList<>();
+        while(!maxHeap.isEmpty())
+            res.add(maxHeap.extractMax().e);
+        return res;
+    }
 
-        return ret;
+    private static void printList(List<Integer> nums){
+        for(Integer num: nums)
+            System.out.print(num + " ");
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+
+        int[] nums = {1, 1, 1, 2, 2, 3};
+        int k = 2;
+        printList((new Solution()).topKFrequent(nums, k));
     }
 }
