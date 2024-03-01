@@ -64,11 +64,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
         if(node == null)
             return null;
 
-        if(key.equals(node.key))
+        if(key.compareTo(node.key) == 0)
             return node;
         else if(key.compareTo(node.key) < 0)
             return getNode(node.left, key);
-        else // if(key.compareTo(node.key) > 0)
+        else // if(key.compareTo(node.key) > 0
             return getNode(node.right, key);
     }
 
@@ -79,13 +79,13 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
 
     @Override
     public V get(K key){
-
         Node node = getNode(root, key);
         return node == null ? null : node.value;
     }
 
     @Override
     public void set(K key, V newValue){
+
         Node node = getNode(root, key);
         if(node == null)
             throw new IllegalArgumentException(key + " doesn't exist!");
@@ -124,15 +124,18 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
             root = remove(root, key);
             return node.value;
         }
+
         return null;
     }
 
+    // 删除掉以node为根的二分搜索树中键为key的节点, 递归算法
+    // 返回删除节点后新的二分搜索树的根
     private Node remove(Node node, K key){
 
         if( node == null )
             return null;
 
-        if( key.compareTo(node.key) < 0 ){
+        if(key.compareTo(node.key) < 0 ){
             node.left = remove(node.left , key);
             return node;
         }
@@ -177,11 +180,11 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();
-        if(FileOperation.readFile("pride-and-prejudice.txt", words)) {
+        if(FileOperation.readFile("pride-and-prejudice.txt", words)){
             System.out.println("Total words: " + words.size());
 
             BSTMap<String, Integer> map = new BSTMap<>();
-            for (String word : words) {
+            for(String word: words) {
                 if (map.contains(word))
                     map.set(word, map.get(word) + 1);
                 else
@@ -192,7 +195,5 @@ public class BSTMap<K extends Comparable<K>, V> implements Map<K, V> {
             System.out.println("Frequency of PRIDE: " + map.get("pride"));
             System.out.println("Frequency of PREJUDICE: " + map.get("prejudice"));
         }
-
-        System.out.println();
     }
 }

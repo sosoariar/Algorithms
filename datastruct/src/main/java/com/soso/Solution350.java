@@ -1,8 +1,5 @@
 /// Leetcode 350. Intersection of Two Arrays II
 /// https://leetcode.com/problems/intersection-of-two-arrays-ii/description/
-///
-/// 课程中在这里暂时没有介绍这个问题
-/// 该代码主要用于使用Leetcode上的问题测试我们的AVLTree类
 
 import java.util.ArrayList;
 
@@ -324,11 +321,67 @@ public class Solution350 {
 
             return retNode;
         }
+
+    }
+
+    private interface Map<K, V> {
+
+        void add(K key, V value);
+        boolean contains(K key);
+        V get(K key);
+        void set(K key, V newValue);
+        V remove(K key);
+        int getSize();
+        boolean isEmpty();
+    }
+
+    private class AVLMap<K extends Comparable<K>, V> implements Map<K, V> {
+
+        private AVLTree<K, V> avl;
+
+        public AVLMap(){
+            avl = new AVLTree<>();
+        }
+
+        @Override
+        public int getSize(){
+            return avl.getSize();
+        }
+
+        @Override
+        public boolean isEmpty(){
+            return avl.isEmpty();
+        }
+
+        @Override
+        public void add(K key, V value){
+            avl.add(key, value);
+        }
+
+        @Override
+        public boolean contains(K key){
+            return avl.contains(key);
+        }
+
+        @Override
+        public V get(K key){
+            return avl.get(key);
+        }
+
+        @Override
+        public void set(K key, V newValue){
+            avl.set(key, newValue);
+        }
+
+        @Override
+        public V remove(K key){
+            return avl.remove(key);
+        }
     }
 
     public int[] intersect(int[] nums1, int[] nums2) {
 
-        AVLTree<Integer, Integer> map = new AVLTree<>();
+        AVLMap<Integer, Integer> map = new AVLMap<>();
         for(int num: nums1){
             if(!map.contains(num))
                 map.add(num, 1);

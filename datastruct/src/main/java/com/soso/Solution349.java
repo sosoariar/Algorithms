@@ -1,12 +1,9 @@
 /// Leetcode 349. Intersection of Two Arrays
 /// https://leetcode.com/problems/intersection-of-two-arrays/description/
-///
-/// 课程中在这里暂时没有介绍这个问题
-/// 该代码主要用于使用Leetcode上的问题测试我们的AVLTree类
 
 import java.util.ArrayList;
 
-public class Solution349 {
+class Solution349 {
 
     private class AVLTree<K extends Comparable<K>, V> {
 
@@ -324,13 +321,57 @@ public class Solution349 {
 
             return retNode;
         }
+
+    }
+
+    private interface Set<E> {
+
+        void add(E e);
+        boolean contains(E e);
+        void remove(E e);
+        int getSize();
+        boolean isEmpty();
+    }
+
+    private class AVLSet<E extends Comparable<E>> implements Set<E> {
+
+        private AVLTree<E, Object> avl;
+
+        public AVLSet(){
+            avl = new AVLTree<>();
+        }
+
+        @Override
+        public int getSize(){
+            return avl.getSize();
+        }
+
+        @Override
+        public boolean isEmpty(){
+            return avl.isEmpty();
+        }
+
+        @Override
+        public void add(E e){
+            avl.add(e, null);
+        }
+
+        @Override
+        public boolean contains(E e){
+            return avl.contains(e);
+        }
+
+        @Override
+        public void remove(E e){
+            avl.remove(e);
+        }
     }
 
     public int[] intersection(int[] nums1, int[] nums2) {
 
-        AVLTree<Integer, Object> set = new AVLTree<>();
+        AVLSet<Integer> set = new AVLSet<>();
         for(int num: nums1)
-            set.add(num, null);
+            set.add(num);
 
         ArrayList<Integer> list = new ArrayList<>();
         for(int num: nums2){

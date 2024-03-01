@@ -13,8 +13,8 @@ public class LinkedListMap<K, V> implements Map<K, V> {
             this.next = next;
         }
 
-        public Node(K key, V value){
-            this(key, value, null);
+        public Node(K key){
+            this(key, null, null);
         }
 
         public Node(){
@@ -46,6 +46,7 @@ public class LinkedListMap<K, V> implements Map<K, V> {
     }
 
     private Node getNode(K key){
+
         Node cur = dummyHead.next;
         while(cur != null){
             if(cur.key.equals(key))
@@ -68,6 +69,7 @@ public class LinkedListMap<K, V> implements Map<K, V> {
 
     @Override
     public void add(K key, V value){
+
         Node node = getNode(key);
         if(node == null){
             dummyHead.next = new Node(key, value, dummyHead.next);
@@ -79,6 +81,7 @@ public class LinkedListMap<K, V> implements Map<K, V> {
 
     @Override
     public void set(K key, V newValue){
+
         Node node = getNode(key);
         if(node == null)
             throw new IllegalArgumentException(key + " doesn't exist!");
@@ -112,11 +115,11 @@ public class LinkedListMap<K, V> implements Map<K, V> {
         System.out.println("Pride and Prejudice");
 
         ArrayList<String> words = new ArrayList<>();
-        if(FileOperation.readFile("pride-and-prejudice.txt", words)) {
+        if(FileOperation.readFile("pride-and-prejudice.txt", words)){
             System.out.println("Total words: " + words.size());
 
             LinkedListMap<String, Integer> map = new LinkedListMap<>();
-            for (String word : words) {
+            for(String word: words) {
                 if (map.contains(word))
                     map.set(word, map.get(word) + 1);
                 else
@@ -127,7 +130,5 @@ public class LinkedListMap<K, V> implements Map<K, V> {
             System.out.println("Frequency of PRIDE: " + map.get("pride"));
             System.out.println("Frequency of PREJUDICE: " + map.get("prejudice"));
         }
-
-        System.out.println();
     }
 }
