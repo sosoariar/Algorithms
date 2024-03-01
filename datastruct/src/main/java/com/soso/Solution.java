@@ -26,6 +26,13 @@ class Solution {
             this(10);
         }
 
+        public Array(E[] arr){
+            data = (E[])new Object[arr.length];
+            for(int i = 0 ; i < arr.length ; i ++)
+                data[i] = arr[i];
+            size = arr.length;
+        }
+
         // 获取数组的容量
         public int getCapacity(){
             return data.length;
@@ -180,6 +187,12 @@ class Solution {
             data = new Array<>();
         }
 
+        public MaxHeap(E[] arr){
+            data = new Array<>(arr);
+            for(int i = parent(arr.length - 1) ; i >= 0 ; i --)
+                siftDown(i);
+        }
+
         // 返回堆中的元素个数
         public int size(){
             return data.getSize();
@@ -256,6 +269,15 @@ class Solution {
                 k = j;
             }
         }
+
+        // 取出堆中的最大元素，并且替换成元素e
+        public E replace(E e){
+
+            E ret = findMax();
+            data.set(0, e);
+            siftDown(0);
+            return ret;
+        }
     }
 
     private class Freq implements Comparable<Freq>{
@@ -292,10 +314,8 @@ class Solution {
         for(int key: map.keySet()){
             if(maxHeap.size() < k)
                 maxHeap.add(new Freq(key, map.get(key)));
-            else if(map.get(key) > maxHeap.findMax().freq){
-                maxHeap.extractMax();
-                maxHeap.add(new Freq(key, map.get(key)));
-            }
+            else if(map.get(key) > maxHeap.findMax().freq)
+                maxHeap.replace(new Freq(key, map.get(key)));
         }
 
         LinkedList<Integer> res = new LinkedList<>();
