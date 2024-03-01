@@ -54,11 +54,11 @@ public class LinkedListSet<E> implements Set<E> {
         System.out.println("A Tale of Two Cities");
 
         ArrayList<String> words2 = new ArrayList<>();
-        if(FileOperation.readFile("a-tale-of-two-cities.txt", words2)){
+        if(FileOperation.readFile("a-tale-of-two-cities.txt", words2)) {
             System.out.println("Total words: " + words2.size());
 
             LinkedListSet<String> set2 = new LinkedListSet<>();
-            for(String word: words2)
+            for (String word : words2)
                 set2.add(word);
             System.out.println("Total different words: " + set2.getSize());
         }
