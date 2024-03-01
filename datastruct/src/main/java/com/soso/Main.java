@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Main {
 
-    private static double testSet(Set<String> set, String filename){
+    private static double testMap(Map<String, Integer> map, String filename){
 
         long startTime = System.nanoTime();
 
@@ -11,10 +11,18 @@ public class Main {
         if(FileOperation.readFile(filename, words)) {
             System.out.println("Total words: " + words.size());
 
-            for (String word : words)
-                set.add(word);
-            System.out.println("Total different words: " + set.getSize());
+            for (String word : words){
+                if(map.contains(word))
+                    map.set(word, map.get(word) + 1);
+                else
+                    map.add(word, 1);
+            }
+
+            System.out.println("Total different words: " + map.getSize());
+            System.out.println("Frequency of PRIDE: " + map.get("pride"));
+            System.out.println("Frequency of PREJUDICE: " + map.get("prejudice"));
         }
+
         long endTime = System.nanoTime();
 
         return (endTime - startTime) / 1000000000.0;
@@ -24,15 +32,15 @@ public class Main {
 
         String filename = "pride-and-prejudice.txt";
 
-        BSTSet<String> bstSet = new BSTSet<>();
-        double time1 = testSet(bstSet, filename);
-        System.out.println("BST Set: " + time1 + " s");
+        BSTMap<String, Integer> bstMap = new BSTMap<>();
+        double time1 = testMap(bstMap, filename);
+        System.out.println("BST Map: " + time1 + " s");
 
         System.out.println();
 
-        LinkedListSet<String> linkedListSet = new LinkedListSet<>();
-        double time2 = testSet(linkedListSet, filename);
-        System.out.println("Linked List Set: " + time2 + " s");
+        LinkedListMap<String, Integer> linkedListMap = new LinkedListMap<>();
+        double time2 = testMap(linkedListMap, filename);
+        System.out.println("Linked List Map: " + time2 + " s");
 
     }
 }
