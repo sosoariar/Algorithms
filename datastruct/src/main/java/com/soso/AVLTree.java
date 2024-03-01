@@ -111,8 +111,12 @@ public class AVLTree<K extends Comparable<K>, V> {
 
         // 计算平衡因子
         int balanceFactor = getBalanceFactor(node);
-        if(Math.abs(balanceFactor) > 1)
-            System.out.println("unbalanced : " + balanceFactor);
+//        if(Math.abs(balanceFactor) > 1)
+//            System.out.println("unbalanced : " + balanceFactor);
+
+        // 平衡维护
+        if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0)
+            ; // 实现平衡维护，下一小节进行具体实现：）
 
         return node;
     }
