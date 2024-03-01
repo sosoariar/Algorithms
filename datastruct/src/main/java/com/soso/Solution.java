@@ -2,7 +2,7 @@
 /// https://leetcode.com/problems/top-k-frequent-elements/description/
 ///
 /// 课程中在这里暂时没有介绍这个问题
-/// 该代码主要用于使用Leetcode上的问题测试我们的MaxHeap类
+/// 该代码主要用于使用Leetcode上的问题测试我们的Priority Queue类
 
 import java.util.LinkedList;
 import java.util.List;
@@ -280,6 +280,49 @@ class Solution {
         }
     }
 
+    public interface Queue<E> {
+
+        int getSize();
+        boolean isEmpty();
+        void enqueue(E e);
+        E dequeue();
+        E getFront();
+    }
+
+    public class PriorityQueue<E extends Comparable<E>> implements Queue<E> {
+
+        private MaxHeap<E> maxHeap;
+
+        public PriorityQueue(){
+            maxHeap = new MaxHeap<>();
+        }
+
+        @Override
+        public int getSize(){
+            return maxHeap.size();
+        }
+
+        @Override
+        public boolean isEmpty(){
+            return maxHeap.isEmpty();
+        }
+
+        @Override
+        public E getFront(){
+            return maxHeap.findMax();
+        }
+
+        @Override
+        public void enqueue(E e){
+            maxHeap.add(e);
+        }
+
+        @Override
+        public E dequeue(){
+            return maxHeap.extractMax();
+        }
+    }
+
     private class Freq implements Comparable<Freq>{
 
         public int e, freq;
@@ -310,17 +353,19 @@ class Solution {
                 map.put(num, 1);
         }
 
-        MaxHeap<Freq> maxHeap = new MaxHeap<>();
+        PriorityQueue<Freq> pq = new PriorityQueue<>();
         for(int key: map.keySet()){
-            if(maxHeap.size() < k)
-                maxHeap.add(new Freq(key, map.get(key)));
-            else if(map.get(key) > maxHeap.findMax().freq)
-                maxHeap.replace(new Freq(key, map.get(key)));
+            if(pq.getSize() < k)
+                pq.enqueue(new Freq(key, map.get(key)));
+            else if(map.get(key) > pq.getFront().freq){
+                pq.dequeue();
+                pq.enqueue(new Freq(key, map.get(key)));
+            }
         }
 
         LinkedList<Integer> res = new LinkedList<>();
-        while(!maxHeap.isEmpty())
-            res.add(maxHeap.extractMax().e);
+        while(!pq.isEmpty())
+            res.add(pq.dequeue().e);
         return res;
     }
 
